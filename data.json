@@ -1,0 +1,31 @@
+{
+  "English": [
+    {
+      "front": "Hello",
+      "ipa": "həˈloʊ",
+      "back": "Xin chào"
+    },
+    {
+      "front": "Good morning",
+      "ipa": "ɡʊd ˈmɔːrnɪŋ",
+      "back": "Chào buổi sáng"
+    },
+    {
+      "front": "Thank you",
+      "ipa": "θæŋk juː",
+      "back": "Cảm ơn"
+    }
+  ],
+  "Math": [
+    {
+      "front": "2 + 2",
+      "ipa": "",
+      "back": "4"
+    },
+    {
+      "front": "5 × 3",
+      "ipa": "",
+      "back": "15"
+    }
+  ]
+}

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Flashcard App</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  display: flex;
+  height: 100vh;
+  background: #f5f5f5;
+}
+
+.sidebar{
+  width: 280px;
+  background: white;
+  border-right: 1px solid #e0e0e0;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.sidebar h3 {
+  margin: 20px 0 15px 0;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.main{
+  flex: 1;
+  padding: 40px;
+  text-align: center;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card{
+  width: 500px;
+  height: 280px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  color: #222;
+  padding: 20px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  border-color: #4CAF50;
+}
+
+.ipa{
+  font-size: 16px;
+  color: #777;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.category-item {
+  padding: 12px;
+  margin-bottom: 8px;
+  background: #f9f9f9;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.category-item:hover {
+  background: #f0f0f0;
+}
+
+.category-item.active {
+  background: #e8f5e9;
+  border-left-color: #4CAF50;
+  font-weight: 500;
+}
+
+.category-item b {
+  cursor: pointer;
+  flex: 1;
+  text-align: left;
+  color: #333;
+}
+
+.category-item button {
+  background: #ff5252;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s ease;
+}
+
+.category-item button:hover {
+  background: #ff1744;
+}
+
+button {
+  margin: 6px 0;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #4CAF50;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+button:hover {
+  background: #45a049;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.button-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.button-group button {
+  flex: 1;
+  margin: 0;
+}
+
+input {
+  width: 100%;
+  margin: 8px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.controls button {
+  min-width: 100px;
+  padding: 12px 20px;
+}
+
+.auto-control {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.auto-control input {
+  width: 80px;
+  margin: 0;
+}
+.w-25 {
+  width: 25%;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h3>📚 Categories</h3>
+
+<div id="categoryList"></div>
+
+<div class="form-group">
+  <label>New Category</label>
+  <input id="newCategory" placeholder="Enter category name...">
+  <button onclick="addCategory()">+ Add Category</button>
+</div>
+
+<div class="button-group">
+  <button onclick="exportData()">⬇ Export</button>
+  <button onclick="document.getElementById('importFile').click()">⬆ Import</button>
+  <input id="importFile" type="file" accept=".json" onchange="importData(event)" style="display:none">
+</div>
+
+<button onclick="resetToDefault()" style="background: #ff9800; font-size: 12px;">🔄 Reset to Default</button>
+
+<hr style="margin: 20px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+<h3>🎴 Add Card</h3>
+
+<div class="form-group">
+  <label>Front</label>
+  <input id="front" placeholder="Question or word...">
+</div>
+
+<div class="form-group">
+  <label>IPA (Optional)</label>
+  <input id="ipa" placeholder="Pronunciation...">
+</div>
+
+<div class="form-group">
+  <label>Back</label>
+  <input id="back" placeholder="Answer or translation...">
+</div>
+
+<button onclick="addCard()">+ Add Card</button>
+
+</div>
+
+
+<div class="main">
+
+<div class="card" onclick="flipCard()" id="card"></div>
+
+<div class="controls">
+  <button onclick="prevCard()">← Previous</button>
+  <button onclick="flipCard()">🔄 Flip</button>
+  <button onclick="nextCard()">Next →</button>
+</div>
+
+<div class="auto-control">
+  <label style="margin: 0;">Auto (seconds):</label>
+  <input id="autoTime" value="3">
+  <button onclick="startAuto()" style="min-width: auto; width: auto; padding: 10px 16px;">▶ Start</button>
+  <button onclick="stopAuto()" style="min-width: auto; width: auto; padding: 10px 16px;">⏹ Stop</button>
+</div>
+
+</div>
+
+
+<script>
+
+let data = {}
+
+let currentCategory = null
+let index = 0
+let showFront = true
+let timer = null
+
+// Load data từ localStorage nếu có, nếu không thì fetch từ data.json
+async function loadData(){
+// Kiểm tra localStorage trước
+let savedData = localStorage.getItem("flashdata")
+if(savedData){
+data = JSON.parse(savedData)
+renderCategories()
+let firstCategory = Object.keys(data)[0]
+if(firstCategory){
+selectCategory(firstCategory)
+}
+return
+}
+
+// Nếu không có localStorage, load từ data.json
+try {
+let response = await fetch("data.json")
+if(response.ok){
+let fileData = await response.json()
+data = fileData
+localStorage.setItem("flashdata", JSON.stringify(data))
+renderCategories()
+let firstCategory = Object.keys(data)[0]
+if(firstCategory){
+selectCategory(firstCategory)
+}
+}else{
+data = {}
+}
+}catch(e){
+data = {}
+renderCategories()
+}
+}
+
+async function resetToDefault(){
+try {
+let response = await fetch("data.json")
+if(response.ok){
+let fileData = await response.json()
+data = fileData
+localStorage.setItem("flashdata", JSON.stringify(data))
+renderCategories()
+let firstCategory = Object.keys(data)[0]
+if(firstCategory){
+selectCategory(firstCategory)
+}
+alert("✓ Reset thành công!")
+}else{
+alert("✗ Không thể tải dữ liệu gốc")
+}
+}catch(e){
+alert("✗ Không thể tải dữ liệu gốc")
+}
+}
+
+function save(){
+localStorage.setItem("flashdata",JSON.stringify(data))
+}
+
+function renderCategories(){
+
+let html=""
+
+for(let c in data){
+
+let isActive = c === currentCategory ? "active" : ""
+
+html+=`
+<div class="category-item ${isActive}">
+<b onclick="selectCategory('${c}')">${c}</b>
+<button class="w-25" onclick="deleteCategory('${c}')">Delete</button>
+</div>
+`
+
+}
+
+document.getElementById("categoryList").innerHTML=html
+
+}
+
+function addCategory(){
+
+let name=document.getElementById("newCategory").value
+
+if(!name)return
+
+data[name]=[]
+
+save()
+renderCategories()
+document.getElementById("newCategory").value=""
+currentCategory=name
+index=0
+renderCard()
+
+}
+
+function deleteCategory(name){
+
+delete data[name]
+save()
+renderCategories()
+
+}
+
+function selectCategory(name){
+
+currentCategory=name
+index=0
+renderCard()
+renderCategories()
+
+}
+
+function addCard(){
+
+if(!currentCategory)return
+
+let front=document.getElementById("front").value
+let ipa=document.getElementById("ipa").value
+let back=document.getElementById("back").value
+
+if(!front || !back)return
+
+data[currentCategory].push({
+front,ipa,back
+})
+
+save()
+document.getElementById("front").value=""
+document.getElementById("ipa").value=""
+document.getElementById("back").value=""
+index=data[currentCategory].length-1
+renderCard()
+
+}
+
+function renderCard(){
+
+if(!currentCategory)return
+
+let cards=data[currentCategory]
+
+if(cards.length==0){
+
+document.getElementById("card").innerHTML="No cards"
+return
+
+}
+
+let card=cards[index]
+
+if(showFront){
+
+document.getElementById("card").innerHTML=
+
+card.front+
+"<div class='ipa'>"+card.ipa+"</div>"
+
+}else{
+
+document.getElementById("card").innerHTML=card.back
+
+}
+
+}
+
+function flipCard(){
+
+showFront=!showFront
+renderCard()
+
+}
+
+function nextCard(){
+
+if(!currentCategory)return
+
+let cards=data[currentCategory]
+
+index++
+
+if(index>=cards.length){
+index=0
+}
+
+showFront=true
+renderCard()
+
+}
+
+function prevCard(){
+
+if(!currentCategory)return
+
+let cards=data[currentCategory]
+
+index--
+
+if(index<0){
+index=cards.length-1
+}
+
+showFront=true
+renderCard()
+
+}
+
+function startAuto(){
+
+if(!currentCategory)return
+
+let cards=data[currentCategory]
+
+if(cards.length==0)return
+
+if(timer)clearInterval(timer)
+
+let t=document.getElementById("autoTime").value
+
+timer=setInterval(nextCard,t*1000)
+
+}
+
+function stopAuto(){
+
+clearInterval(timer)
+
+}
+
+function exportData(){
+
+let json = JSON.stringify(data, null, 2)
+let element = document.createElement("a")
+element.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(json))
+element.setAttribute("download", "flashcard_data.json")
+element.click()
+
+}
+
+function importData(event){
+
+let file = event.target.files[0]
+let reader = new FileReader()
+
+reader.onload = function(e){
+try {
+data = JSON.parse(e.target.result)
+save()
+renderCategories()
+document.getElementById("importFile").value = ""
+alert("Dữ liệu nhập thành công!")
+}catch(error){
+alert("Lỗi: File không hợp lệ")
+}
+}
+
+reader.readAsText(file)
+
+}
+
+loadData()
+
+</script>
+
+</body>
+</html>
