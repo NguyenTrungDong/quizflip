@@ -90,6 +90,7 @@ body{
   align-items: center;
   border-left: 3px solid transparent;
   transition: all 0.2s ease;
+  gap: 8px;
 }
 
 .category-item:hover {
@@ -113,14 +114,31 @@ body{
   background: #ff5252;
   color: white;
   border: none;
-  padding: 4px 8px;
+  padding: 6px 10px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 12px;
   transition: background 0.2s ease;
+  white-space: nowrap;
 }
 
 .category-item button:hover {
+  background: #ff1744;
+}
+
+.category-item .btn-edit {
+  background: #2196F3;
+}
+
+.category-item .btn-edit:hover {
+  background: #1976D2;
+}
+
+.category-item .btn-delete {
+  background: #ff5252;
+}
+
+.category-item .btn-delete:hover {
   background: #ff1744;
 }
 
@@ -365,7 +383,8 @@ let isActive = c === currentCategory ? "active" : ""
 html+=`
 <div class="category-item ${isActive}">
 <b onclick="selectCategory('${c}')">${c}</b>
-<button class="w-25" onclick="deleteCategory('${c}')">Delete</button>
+<button class="btn-edit" onclick="editCategory('${c}')">✏ Edit</button>
+<button class="btn-delete" onclick="deleteCategory('${c}')">🗑 Delete</button>
 </div>
 `
 
@@ -388,6 +407,30 @@ renderCategories()
 document.getElementById("newCategory").value=""
 currentCategory=name
 index=0
+renderCard()
+
+}
+
+function editCategory(oldName){
+
+let newName = prompt("Nhập tên danh mục mới:", oldName)
+
+if(!newName || newName === oldName) return
+
+if(data[newName]){
+alert("Danh mục này đã tồn tại!")
+return
+}
+
+data[newName] = data[oldName]
+delete data[oldName]
+
+if(currentCategory === oldName){
+currentCategory = newName
+}
+
+save()
+renderCategories()
 renderCard()
 
 }
