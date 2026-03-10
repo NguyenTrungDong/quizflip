@@ -4,325 +4,7 @@
 <meta charset="UTF-8">
 <title>Flashcard App</title>
 
-<style>
-
-* {
-  box-sizing: border-box;
-}
-
-body{
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  display: flex;
-  height: 100vh;
-  background: #f5f5f5;
-}
-
-.hamburger {
-  display: none;
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 1000;
-  background: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.hamburger:hover {
-  background: #45a049;
-}
-
-.sidebar{
-  width: 280px;
-  background: white;
-  border-right: 1px solid #e0e0e0;
-  padding: 20px;
-  overflow-y: auto;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.sidebar h3 {
-  margin: 20px 0 15px 0;
-  color: #333;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.main{
-  flex: 1;
-  padding: 40px;
-  text-align: center;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.card{
-  width: 500px;
-  height: 280px;
-  background: white;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 32px;
-  font-weight: 500;
-  cursor: pointer;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-  color: #222;
-  padding: 20px;
-}
-
-.card:hover {
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  border-color: #4CAF50;
-}
-
-.ipa{
-  font-size: 16px;
-  color: #777;
-  margin-top: 10px;
-  font-style: italic;
-}
-
-.category-item {
-  padding: 12px;
-  margin-bottom: 8px;
-  background: #f9f9f9;
-  border-radius: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-left: 3px solid transparent;
-  transition: all 0.2s ease;
-  gap: 8px;
-}
-
-.category-item:hover {
-  background: #f0f0f0;
-}
-
-.category-item.active {
-  background: #e8f5e9;
-  border-left-color: #4CAF50;
-  font-weight: 500;
-}
-
-.category-item b {
-  cursor: pointer;
-  flex: 1;
-  text-align: left;
-  color: #333;
-}
-
-.category-item button {
-  background: #ff5252;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: background 0.2s ease;
-  white-space: nowrap;
-}
-
-.category-item button:hover {
-  background: #ff1744;
-}
-
-.category-item .btn-edit {
-  background: #2196F3;
-}
-
-.category-item .btn-edit:hover {
-  background: #1976D2;
-}
-
-.category-item .btn-delete {
-  background: #ff5252;
-}
-
-.category-item .btn-delete:hover {
-  background: #ff1744;
-}
-
-button {
-  margin: 6px 0;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  background: #4CAF50;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  width: 100%;
-}
-
-button:hover {
-  background: #45a049;
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-}
-
-button:active {
-  transform: scale(0.98);
-}
-
-.button-group {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 15px;
-}
-
-.button-group button {
-  flex: 1;
-  margin: 0;
-}
-
-input {
-  width: 100%;
-  margin: 8px 0;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  font-family: inherit;
-  transition: border-color 0.2s ease;
-}
-
-input:focus {
-  outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
-}
-
-label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  color: #666;
-  margin-top: 12px;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.controls {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-bottom: 30px;
-}
-
-.controls button {
-  min-width: 100px;
-  padding: 12px 20px;
-}
-
-.auto-control {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-top: 15px;
-}
-
-.auto-control input {
-  width: 80px;
-  margin: 0;
-}
-.w-25 {
-  width: 25%;
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-  /* Tablet */
-  .sidebar {
-    width: 250px;
-  }
-  .card {
-    width: 450px;
-    height: 250px;
-    font-size: 28px;
-  }
-  #examples {
-    width: 250px;
-  }
-}
-
-@media (max-width: 768px) {
-  /* Smartphone */
-  .hamburger {
-    display: block;
-  }
-  .sidebar {
-    position: fixed;
-    left: -280px;
-    top: 0;
-    height: 100vh;
-    z-index: 999;
-    transition: left 0.3s ease;
-  }
-  .sidebar.open {
-    left: 0;
-  }
-  body {
-    flex-direction: column;
-  }
-  .main {
-    width: 100%;
-    padding: 20px;
-  }
-  .card {
-    width: 100%;
-    max-width: 400px;
-    height: 200px;
-    font-size: 24px;
-  }
-  #examples {
-    position: static;
-    width: 100%;
-    max-width: 400px;
-    margin-top: 20px;
-    order: 1;
-  }
-  .controls {
-    flex-wrap: wrap;
-  }
-  .controls button {
-    min-width: 80px;
-    padding: 10px;
-  }
-  .auto-control {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .auto-control input {
-    width: 60px;
-  }
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -375,6 +57,10 @@ label {
 
 <div class="main">
 
+<button class="back-to-cards" onclick="showCardView()">← Back to Cards</button>
+
+<div class="word-list" id="wordList"></div>
+
 <div class="card" onclick="flipCard()" id="card"></div>
 
 <div class="controls">
@@ -418,6 +104,7 @@ renderCategories()
 let firstCategory = Object.keys(data)[0]
 if(firstCategory){
 selectCategory(firstCategory)
+showCardView()
 }
 return
 }
@@ -434,6 +121,7 @@ renderCategories()
 let firstCategory = Object.keys(data)[0]
 if(firstCategory){
 selectCategory(firstCategory)
+showCardView()
 }
 }else{
 data = {}
@@ -455,6 +143,7 @@ renderCategories()
 let firstCategory = Object.keys(data)[0]
 if(firstCategory){
 selectCategory(firstCategory)
+showCardView()
 }
 alert("✓ Reset thành công!")
 }else{
@@ -548,8 +237,7 @@ function selectCategory(name){
 
 currentCategory=name
 index=0
-renderCard()
-renderCategories()
+showWordList()
 
 }
 
@@ -667,34 +355,96 @@ timer=setInterval(nextCard,t*1000)
 
 }
 
-function renderExamples(){
-
-if(!currentCategory)return
-
-let cards=data[currentCategory]
-
-if(cards.length==0)return
-
-let card=cards[index]
-
-let html="<h4>Ví dụ:</h4>"
-
-if(card.examples && card.examples.length>0){
-
-html+="<ul>"
-
-card.examples.forEach(ex=>html+=`<li>${ex}</li>`)
-
-html+="</ul>"
-
-}else{
-
-html+="<p>Chưa có ví dụ</p>"
-
+function showWordList(){
+  document.getElementById("wordList").style.display = "block";
+  document.getElementById("card").style.display = "none";
+  document.getElementById("examples").style.display = "none";
+  document.querySelector(".controls").style.display = "none";
+  document.querySelector(".auto-control").style.display = "none";
+  document.querySelector(".back-to-cards").style.display = "block";
+  renderWordList();
+  renderCategories();
 }
 
-document.getElementById("examples").innerHTML=html
+function showCardView(){
+  document.getElementById("wordList").style.display = "none";
+  document.getElementById("card").style.display = "flex";
+  document.getElementById("examples").style.display = "block";
+  document.querySelector(".controls").style.display = "flex";
+  document.querySelector(".auto-control").style.display = "flex";
+  document.querySelector(".back-to-cards").style.display = "none";
+  renderCard();
+}
 
+function renderWordList(){
+  if(!currentCategory) return;
+  let cards = data[currentCategory];
+  let html = `<h3>${currentCategory} - Danh sách từ</h3>`;
+  cards.forEach((card, idx) => {
+    html += `
+      <div class="word-item">
+        <div class="word-front" onclick="viewCard(${idx})">${card.front}</div>
+        <div class="word-actions">
+          <button class="btn-edit-word" onclick="editWord(${idx})">✏ Sửa</button>
+          <button class="btn-delete-word" onclick="deleteWord(${idx})">🗑 Xóa</button>
+        </div>
+      </div>
+      <div style="margin-left: 20px;">
+        ${card.examples.map((ex, exIdx) => `
+          <div class="example-item">
+            <div class="example-text">${ex}</div>
+            <div class="example-actions">
+              <button class="btn-edit-example" onclick="editExample(${idx}, ${exIdx})">✏</button>
+              <button class="btn-delete-example" onclick="deleteExample(${idx}, ${exIdx})">🗑</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  });
+  document.getElementById("wordList").innerHTML = html;
+}
+
+function viewCard(idx){
+  index = idx;
+  showCardView();
+}
+
+function editWord(idx){
+  let card = data[currentCategory][idx];
+  let newFront = prompt("Front:", card.front);
+  let newIpa = prompt("IPA:", card.ipa);
+  let newBack = prompt("Back:", card.back);
+  if(newFront !== null && newBack !== null){
+    data[currentCategory][idx] = {front: newFront, ipa: newIpa, back: newBack, examples: card.examples};
+    save();
+    renderWordList();
+  }
+}
+
+function deleteWord(idx){
+  if(confirm("Bạn có chắc muốn xóa từ này?")){
+    data[currentCategory].splice(idx, 1);
+    save();
+    renderWordList();
+  }
+}
+
+function editExample(wordIdx, exIdx){
+  let newEx = prompt("Sửa ví dụ:", data[currentCategory][wordIdx].examples[exIdx]);
+  if(newEx !== null){
+    data[currentCategory][wordIdx].examples[exIdx] = newEx.trim();
+    save();
+    renderWordList();
+  }
+}
+
+function deleteExample(wordIdx, exIdx){
+  if(confirm("Bạn có chắc muốn xóa ví dụ này?")){
+    data[currentCategory][wordIdx].examples.splice(exIdx, 1);
+    save();
+    renderWordList();
+  }
 }
 
 function exportData(){
