@@ -162,6 +162,10 @@ if(!card.examples) card.examples = []
 }
 }
 
+function save(){
+localStorage.setItem("flashdata",JSON.stringify(data))
+}
+
 function renderCategories(){
 
 let html=""
@@ -173,7 +177,7 @@ let isActive = c === currentCategory ? "active" : ""
 html+=`
 <div class="category-item ${isActive}">
 <b onclick="selectCategory('${c}')">${c}</b>
-<button class="btn-edit" onclick="editCategory('${c}')">✏ Edit</button>
+<button class="btn-edit " onclick="editCategory('${c}')">✏ Edit</button>
 <button class="btn-delete" onclick="deleteCategory('${c}')">🗑 Delete</button>
 </div>
 `
@@ -261,6 +265,7 @@ document.getElementById("ipa").value=""
 document.getElementById("back").value=""
 index=data[currentCategory].length-1
 renderCard()
+renderWordList()
 
 }
 
@@ -379,7 +384,7 @@ function showCardView(){
 function renderWordList(){
   if(!currentCategory) return;
   let cards = data[currentCategory];
-  let html = `<h3>${currentCategory} - Danh sách từ</h3>`;
+  let html = `<h3>${currentCategory} - Vocabulary</h3>`;
   cards.forEach((card, idx) => {
     html += `
       <div class="word-item">

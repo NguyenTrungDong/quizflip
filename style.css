@@ -362,8 +362,12 @@ label {
   width: 80px;
   margin: 0;
 }
-.w-25 {
-  width: 25%;
+.category-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  
 }
 
 /* Responsive Design */
